@@ -12,10 +12,32 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "gpt-coder.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "gpt-coder.getQuery",
+        "category": "GPT CODER",
+        "title": "Get Query"
+      },
+      {
+				"command": "gpt-coder.explainQuery",
+				"category": "GPT CODER",
+				"title": "Explain Query"
+			},
+      {
+				"command": "gpt-coder.translateQuery",
+				"category": "GPT CODER",
+				"title": "Translate Query"
+			}
+    ],
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "gpt-coder.colorsView",
+          "name": "GPT CODER"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
@@ -23,14 +45,17 @@
     "test": "node ./test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.76.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
+    "@types/vscode": "^1.76.0",
+    "@vscode/test-electron": "^2.2.3",
     "eslint": "^8.34.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "typescript": "^4.9.5",
-    "@vscode/test-electron": "^2.2.3"
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "openai": "^3.2.1"
   }
 }
