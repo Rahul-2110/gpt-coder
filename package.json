@@ -12,6 +12,15 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "gpt-coder",
+          "title": "GPT Coder",
+          "icon": "assets/extension-icon.png"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "gpt-coder.getQuery",
@@ -30,11 +39,11 @@
 			}
     ],
     "views": {
-      "explorer": [
+      "gpt-coder": [
         {
           "type": "webview",
           "id": "gpt-coder.colorsView",
-          "name": "GPT CODER"
+          "name": "GPT Coder"
         }
       ]
     }

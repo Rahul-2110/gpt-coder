@@ -6,7 +6,7 @@ const { displayError } = require('./utils/errors');
 const { ExtensionContext, window, commands } = require('vscode');
 const { styleAsComment } = require('./utils/comments');
 
-const key1 = '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'
+const key1 = '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'
 const key2 = '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'
 
 const config = new Configuration({
@@ -208,7 +208,12 @@ class ColorsViewProvider {
 							const selection = editor.selection;
 							const lang = editor.document.languageId;
 							if (!editor) return displayError("noEditor");
-							const comment = styleAsComment(await getChatGPTAnswer(getPromptForQuery(data.language, data.prompt)), lang);
+							try{
+								const comment = styleAsComment(await getChatGPTAnswer(getPromptForQuery(data.language, data.prompt)), lang);
+							}catch(err){
+								console.log(err)
+							}
+							
 							editor.edit((editBuilder) => {
 								editBuilder.insert(selection.end, `\n${comment}`);
 							});
@@ -275,11 +280,12 @@ class ColorsViewProvider {
 
     _getHtmlForWebview(webview) {
         // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'main.js'));
+		const scriptUri2 = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
         // Do the same for the stylesheet.
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'dist', 'main.css'));
         const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
         const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
-        const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
         // Use a nonce to only allow a specific script to be run.
         const nonce = getNonce();
         return `<!DOCTYPE html>
@@ -304,58 +310,10 @@ class ColorsViewProvider {
 			</head>
 			<body>
 
-				<div class="container">
-					<h3>Query Generator</h3>
-
-					<div class="query">
-						<label class="input" for="query-language">Language</label><br>
-						<input class="input"type="text" id="query-language"></input>
-
-						<label class="label" for="query-prompt">Prompt</label><br>
-						<input class="input" type="text" id="query-prompt"></input>
-
-						<button id="get-query" class="button">Generate Query</button>
-					</div>
-					
-				</div>
-
-				<hr>
-				<div class="container">
-					<h3>Query Translator</h3>
-
-					<div class="query">
-						<label class="input" for="query-language-1">From language</label><br>
-						<input class="input"type="text" id="query-language-1"></input>
-
-						<label class="label" for="query-language-2">To language</label><br>
-						<input class="input" type="text" id="query-language-2"></input>
-
-						<label class="label" for="query-prompt-2">Prompt</label><br>
-						<input class="input" type="text" id="query-prompt-2"></input>
-
-						<button id="translate-query" class="button">Translate Query</button>
-					</div>
-					
-				</div>
-
-				<hr>
-				<div class="container">
-					<h3>Query Explainer</h3>
-
-					<div class="query">
-						<label class="input" for="explain-language">Language</label><br>
-						<input class="input"type="text" id="explain-language"></input>
-
-						<label class="label" for="explain-query">Query</label><br>
-						<input class="input" type="text" id="explain-query"></input>
-
-						<button id="explain-query-btn" class="button">Explain Query</button>
-					</div>
-					
-				</div>
-				
+				<div id="app"></div>
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
+				<script nonce="${nonce}" src="${scriptUri2}"></script>
 			</body>
 			</html>`;
     }

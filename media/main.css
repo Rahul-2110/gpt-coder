@@ -2,33 +2,3 @@ body {
 	background-color: transparent;
 }
 
-.container { 
-	text-align: center;
-	margin: 20px;
-}
-
-.input{
-	margin: 5px;
-	border-radius: 5px;
-}
-
-.label{
-	margin: 5px;
-	border-radius: 5px;
-}
-
-.query{
-	padding: 10px;
-}
-
-.query-input{
-	margin-top: 10px;
-}
-
-.button {
-	margin-top: 15px;
-	padding: 5px;
-	border-radius: 5px;
-	display: inline-block;
-	max-width: 50%;
-}
